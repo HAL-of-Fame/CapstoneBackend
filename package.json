@@ -1,0 +1,20 @@
+{
+  "name": "CapstoneBackend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HAL-of-Fame/CapstoneBackend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HAL-of-Fame/CapstoneBackend/issues"
+  },
+  "homepage": "https://github.com/HAL-of-Fame/CapstoneBackend#readme"
+}

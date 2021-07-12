@@ -4,22 +4,22 @@ const morgan = require('morgan')
 const { PORT } = require("./config")
 const { BadRequestError, NotFoundError } = require("./utils/errors")
 const authRoutes = require("./routes/auth")
+const orderRoutes = require("./routes/order")
+const security = require("./middleware/security")
+
 
 
 const app = express()
-const security = require("./middleware/security")
 
 
 app.use(cors())
 app.use(express.json())
 app.use(morgan('tiny'))
-app.use(security.extractUserFromJwt)
-// for every request, 
-// check if a user/token exists in the authorization header
-// if it does, attach the decoded user to res.locals
+app.use(security.extractUserFromJwt) //responsible for tokens
+
 
 app.use("/auth", authRoutes)
-
+app.use("/orders", orderRoutes)
 
 // if endpoint doesn't exist then will send to NotFoundError. Handles 404 errors
 // basically it tries going through /auth and then /exercise. if None of those work

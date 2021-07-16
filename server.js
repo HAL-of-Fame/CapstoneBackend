@@ -4,7 +4,8 @@ const morgan = require('morgan')
 const { PORT } = require("./config")
 const { BadRequestError, NotFoundError } = require("./utils/errors")
 const authRoutes = require("./routes/auth")
-
+const storeRoutes = require("./routes/store")
+const orderRoutes = require("./routes/order")
 
 const app = express()
 const security = require("./middleware/security")
@@ -19,7 +20,8 @@ app.use(security.extractUserFromJwt)
 // if it does, attach the decoded user to res.locals
 
 app.use("/auth", authRoutes)
-
+app.use("/store", storeRoutes)
+app.use("/order", orderRoutes)
 
 // if endpoint doesn't exist then will send to NotFoundError. Handles 404 errors
 // basically it tries going through /auth and then /exercise. if None of those work

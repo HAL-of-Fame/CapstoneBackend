@@ -15,10 +15,11 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 app.use(morgan('tiny'))
-app.use(security.extractUserFromJwt) //responsible for tokens
+app.use(security.extractUserFromJwt) 
+// for every request, cehck if a token exists in authorization header
+// if it does, attach the decoded user to res.locals
 
-
-app.use("/auth", authRoutes)
+// routes
 app.use("/auth", authRoutes)
 app.use("/store", storeRoutes)
 app.use("/order", orderRoutes)

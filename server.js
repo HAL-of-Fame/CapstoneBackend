@@ -6,7 +6,7 @@ const { BadRequestError, NotFoundError } = require("./utils/errors")
 const authRoutes = require("./routes/auth")
 const orderRoutes = require("./routes/order")
 const security = require("./middleware/security")
-
+const storeRoutes = require("./routes/store")
 
 
 const app = express()
@@ -19,7 +19,9 @@ app.use(security.extractUserFromJwt) //responsible for tokens
 
 
 app.use("/auth", authRoutes)
-app.use("/orders", orderRoutes)
+app.use("/auth", authRoutes)
+app.use("/store", storeRoutes)
+app.use("/order", orderRoutes)
 
 // if endpoint doesn't exist then will send to NotFoundError. Handles 404 errors
 // basically it tries going through /auth and then /exercise. if None of those work

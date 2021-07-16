@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon server.js",
+
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -16,5 +18,16 @@
   "bugs": {
     "url": "https://github.com/HAL-of-Fame/CapstoneBackend/issues"
   },
-  "homepage": "https://github.com/HAL-of-Fame/CapstoneBackend#readme"
+  "homepage": "https://github.com/HAL-of-Fame/CapstoneBackend#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "colors": "^1.4.0",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^5.0.0-alpha.8",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.12",
+    "pg": "^8.6.0"
+  }
 }

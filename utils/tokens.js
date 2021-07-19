@@ -9,6 +9,7 @@ const createUserJwt = (creds) => {
   const payload = {
     id: creds.id,
     email: creds.email,
+    username: creds.username,
     // isAdmin: creds.isAdmin || false,
   }
 

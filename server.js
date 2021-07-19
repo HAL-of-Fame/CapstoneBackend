@@ -7,7 +7,7 @@ const authRoutes = require("./routes/auth")
 const orderRoutes = require("./routes/order")
 const security = require("./middleware/security")
 const storeRoutes = require("./routes/store")
-
+const postRoutes = require("./routes/posts")
 
 const app = express()
 
@@ -23,6 +23,7 @@ app.use(security.extractUserFromJwt)
 app.use("/auth", authRoutes)
 app.use("/store", storeRoutes)
 app.use("/order", orderRoutes)
+app.use("/posts", postRoutes)
 
 // if endpoint doesn't exist then will send to NotFoundError. Handles 404 errors
 // basically it tries going through /auth and then /exercise. if None of those work

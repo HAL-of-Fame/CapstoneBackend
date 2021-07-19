@@ -11,7 +11,7 @@ class Post {
              p.user_id AS "userId",
              u.email AS "userEmail",
              p.created_at AS "createdAt",
-             p.updateD_at AS "updatedAt"
+             p.updated_at AS "updatedAt"
       FROM posts AS p
       JOIN users AS u ON u.id = p.user_id
       ORDER BY p.created_at DESC
@@ -24,11 +24,21 @@ class Post {
   static async fetchPostById(postId) {
     const results = await db.query(
       `
-    SELECT * FROM posts WHERE id= $1
+      SELECT p.id,
+             p.caption,
+             p.user_id AS "userId",
+             u.email AS "userEmail",
+             u.username AS "userName",
+             p.created_at AS "createdAt",
+             p.updated_at AS "updatedAt"
+      FROM posts AS p
+          JOIN users AS u ON u.id = p.user_id
+      WHERE p.id = $1
     `,
       [postId]
     );
     const post = results.rows[0];
+
     if (!post) {
       throw new NotFoundError();
     }
@@ -65,7 +75,31 @@ class Post {
   }
 
   // edit a new post
-  static async editPost({ postId, postUpdate }) {}
+  static async editPost({ postId, postUpdate }) {
+    const requiredFields = ["caption"];
+    requiredFields.forEach((field) => {
+      if (!postUpdate.hasOwnProperty(field)) {
+        throw new BadRequestError(
+          `Required field - ${field} - missing from request body`
+        );
+      }
+    });
+    const results = await db.query(
+      `
+      UPDATE posts 
+      SET caption = $1,
+        updated_at = NOW()
+      WHERE id = $2
+      RETURNING id,
+                caption,
+                user_id AS "userId",
+                created_at AS "createdAt",
+                updated_at AS "updatedAt"
+      `,
+      [postUpdate.caption, postId]
+    );
+    return results.rows[0];
+  }
 }
 
 module.exports = Post;

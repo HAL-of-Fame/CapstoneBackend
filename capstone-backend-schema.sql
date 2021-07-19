@@ -11,6 +11,7 @@ CREATE TABLE users (
 
 CREATE TABLE posts (
   id          SERIAL PRIMARY KEY,
+  caption     VARCHAR(140) NOT NULL,
   user_id     INTEGER NOT NULL,
   created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
   updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),

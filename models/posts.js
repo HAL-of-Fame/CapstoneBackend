@@ -100,6 +100,18 @@ class Post {
     );
     return results.rows[0];
   }
+
+  static async deletePostById(postId) {
+    const results = await db.query(
+      `
+      DELETE FROM posts
+      WHERE id = $1
+    `,
+      [postId]
+    );
+    const post = results.rows[0];
+    return post;
+  }
 }
 
 module.exports = Post;

@@ -10,15 +10,24 @@ class Post {
              p.caption,
              p.user_id AS "userId",
              u.email AS "userEmail",
+             AVG(r.rating) AS "rating",
+             COUNT(r.rating) AS "totalRatings",
              p.created_at AS "createdAt",
              p.updated_at AS "updatedAt"
       FROM posts AS p
-      JOIN users AS u ON u.id = p.user_id
+      LEFT JOIN users AS u ON u.id = p.user_id
+      LEFT JOIN ratings AS r ON r.post_id = p.id
+      GROUP BY p.id, u.email
       ORDER BY p.created_at DESC
       `
     );
     return results.rows;
   }
+  // if you keep the join ratings then it'll only show all the posts that have 
+  // been rated. JOIN ratings AS r ON r.user_id = p.user_id
+  // r.rating AS "postRating",
+  // LEFT JOIN ratings AS r ON r.post_id = p.id will get all the posts that even have 0 ratings
+
 
   // fetch a single post
   static async fetchPostById(postId) {
@@ -28,12 +37,16 @@ class Post {
              p.caption,
              p.user_id AS "userId",
              u.email AS "userEmail",
+             AVG(r.rating) AS "rating",
+             COUNT(r.rating) AS "totalRatings",
              u.username AS "userName",
              p.created_at AS "createdAt",
              p.updated_at AS "updatedAt"
       FROM posts AS p
-          JOIN users AS u ON u.id = p.user_id
+          LEFT JOIN users AS u ON u.id = p.user_id
+          LEFT JOIN ratings AS r ON r.post_id = p.id
       WHERE p.id = $1
+      GROUP BY p.id, u.username, u.email
     `,
       [postId]
     );

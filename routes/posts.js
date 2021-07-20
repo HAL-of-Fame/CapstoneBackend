@@ -7,7 +7,7 @@ const security = require("../middleware/security"); // for middleware
 const { createUserJwt } = require("../utils/tokens"); // to generate JWT tokens
 const permissions = require("../middleware/permissions");
 const Post = require("../models/posts");
-
+const Rating = require("../models/rating")
 // create a new post
 router.post(
   "/",
@@ -71,22 +71,27 @@ router.delete(
     try {
       const { postId } = req.params;
       const post = await Post.deletePostById(postId);
-      return res.status(200).json({"message": "post deleted" });
+      return res.status(200).json({ message: "post deleted" });
     } catch (err) {
       next(err);
     }
   }
 );
 
-router.post("/:postId/ratings", async function (req, res, next) {
-  try {
-    // create a rating for a post
-    const user = await User.login(req.body);
-    const token = createUserJwt(user);
-    // const user = await User.authenticate(req.body)
-    return res.status(200).json({ user, token });
-  } catch (err) {
-    next(err);
+// create a rating for a post
+router.post(
+  "/:postId/ratings",
+  security.requireAuthenticatedUser,
+  permissions.authUserIsNotPostOwner,
+  async function (req, res, next) {
+    try {
+      const { postId } = req.params //from the URL
+      const { user } = res.locals // from the header in the JWT
+      const rating = await Rating.createRatingForPost({ rating: req.body.rating, user, postId})
+      return res.status(200).json({ rating });
+    } catch (err) {
+      next(err);
+    }
   }
-});
+);
 module.exports = router;

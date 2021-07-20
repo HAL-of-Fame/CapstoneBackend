@@ -20,7 +20,7 @@ CREATE TABLE posts (
 
 
 CREATE TABLE ratings (
-  rating      INTEGER NOT NULL CHECK (rating > 0 AND rating <= 10),
+  rating      INTEGER NOT NULL CHECK (rating > 0 AND rating <= 5),
   post_id     INTEGER NOT NULL REFERENCES posts(id) ON DELETE CASCADE,
   user_id     INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   created_at  TIMESTAMP NOT NULL DEFAULT NOW(),

@@ -19,9 +19,9 @@ class Rating {
   }
 
   static async createRatingForPost({ rating, user, postId }) {
-    if (!Number(rating) || Number(rating) <= 0 || Number(rating) > 10) {
+    if (!Number(rating) || Number(rating) <= 0 || Number(rating) > 5) {
       throw new BadRequestError(
-        "Invalid rating provided, must be an integer between 1-10"
+        "Invalid rating provided, must be an integer between 1-5"
       );
     }
 

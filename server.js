@@ -7,7 +7,6 @@ const authRoutes = require("./routes/auth");
 const orderRoutes = require("./routes/order");
 const security = require("./middleware/security");
 const storeRoutes = require("./routes/store");
-const itemRoutes = require("./routes/item");
 
 const app = express();
 

@@ -13,7 +13,6 @@ const authUserOwnsPost = async (req, res, next) => {
         if (post.userEmail !== user.email) {
             throw new ForbiddenError(`${user.username} is not allowed to update ${post.userName}'s posts`)
         }
-        console.log('i made it past taht statement')
         res.locals.post = post 
         return next()
     } catch(err) {
@@ -32,7 +31,6 @@ const authUserIsNotPostOwner = async (req, res, next) => {
         if (post.userEmail == user.email) {
             throw new BadRequestError(`Users are not allowed to rate their own posts`)
         }
-        console.log('i made it past taht statement')
         res.locals.post = post 
         return next()
     } catch(err) {

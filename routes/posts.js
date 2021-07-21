@@ -15,6 +15,7 @@ router.post(
   async function (req, res, next) {
     try {
       const { user } = res.locals;
+      console.log(req.body)
       const post = await Post.createNewPost({ user, post: req.body });
       return res.status(200).json({ post });
     } catch (err) {

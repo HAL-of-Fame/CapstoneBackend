@@ -7,7 +7,8 @@ class Post {
     const results = await db.query(
       `
       SELECT p.id,
-             p.caption,
+             p.title,
+             p.text,
              p.user_id AS "userId",
              u.email AS "userEmail",
              AVG(r.rating) AS "rating",
@@ -34,7 +35,8 @@ class Post {
     const results = await db.query(
       `
       SELECT p.id,
-             p.caption,
+             p.title,
+             p.text,
              p.user_id AS "userId",
              u.email AS "userEmail",
              AVG(r.rating) AS "rating",
@@ -60,7 +62,7 @@ class Post {
 
   // create a new post
   static async createNewPost({ post, user }) {
-    const requiredFields = ["caption"];
+    const requiredFields = ["title", "text"];
     requiredFields.forEach((field) => {
       if (!post.hasOwnProperty(field)) {
         throw new BadRequestError(
@@ -69,27 +71,28 @@ class Post {
       }
     });
 
-    if (post.caption.length > 140) {
-      throw new BadRequestError(`Post caption must be 140 characters or less`);
+    if (post.title.length > 140) {
+      throw new BadRequestError(`Title text must be 140 characters or less`);
     }
     const results = await db.query(
       `
-      INSERT INTO posts (caption, user_id)
-      VALUES ($1, $2)
+      INSERT INTO posts (text, user_id, title)
+      VALUES ($1, $2, $3)
       RETURNING id AS "primaryKey",
                 user_id,
-                caption,
+                title,
+                text,
                 created_at AS "createdAt",
                 updated_at AS "updatedAt"  
                 `,
-      [post.caption, user.id]
+      [post.text, user.id, post.title]
     );
     return results.rows[0];
   }
 
   // edit a new post
   static async editPost({ postId, postUpdate }) {
-    const requiredFields = ["caption"];
+    const requiredFields = ["title", "text"];
     requiredFields.forEach((field) => {
       if (!postUpdate.hasOwnProperty(field)) {
         throw new BadRequestError(
@@ -100,16 +103,17 @@ class Post {
     const results = await db.query(
       `
       UPDATE posts 
-      SET caption = $1,
+      SET text = $1,
+          title = $3,
         updated_at = NOW()
       WHERE id = $2
       RETURNING id,
-                caption,
+                text,
                 user_id AS "userId",
                 created_at AS "createdAt",
                 updated_at AS "updatedAt"
       `,
-      [postUpdate.caption, postId]
+      [postUpdate.text, postId, postUpdate.title]
     );
     return results.rows[0];
   }

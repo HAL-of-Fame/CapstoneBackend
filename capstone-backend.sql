@@ -1,4 +1,4 @@
-\echo 'Delete and recreate life tracker db?'
+\echo 'Delete and recreate capstone db?'
 \prompt 'Return for yes or control-C to cancel >' answer 
 
 DROP DATABASE IF EXISTS capstone_backend; 

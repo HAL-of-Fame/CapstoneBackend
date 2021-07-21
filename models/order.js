@@ -1,7 +1,8 @@
-const { BadRequestError } = require("../utils/errors")
-const db = require("../db")
+const { BadRequestError } = require("../utils/errors");
+const db = require("../db");
 
 class Order {
+  //returns all the orders that the user has created
   static async listOrdersForUser(user) {
     const query = `
       SELECT orders.id AS "orderId",
@@ -13,18 +14,19 @@ class Order {
         JOIN order_details AS od ON od.order_id = orders.id
         JOIN products ON products.id = od.product_id
       WHERE orders.customer_id = (SELECT id FROM users WHERE email = $1)
-    `
-    const result = await db.query(query, [user.email])
+    `;
+    const result = await db.query(query, [user.email]);
 
-    return result.rows
+    return result.rows;
   }
 
+  //take a users order and store it in the database
   static async createOrder({ order, user }) {
     if (!order || !Object.keys(order).length) {
-      throw new BadRequestError("No order info provided")
+      throw new BadRequestError("No order info provided");
     }
     if (!user) {
-      throw new BadRequestError("No user provided")
+      throw new BadRequestError("No user provided");
     }
 
     // create a new order
@@ -35,13 +37,13 @@ class Order {
       RETURNING id
     `,
       [user.email]
-    )
+    );
     // get orderId
-    const orderId = orderResult.rows[0].id
+    const orderId = orderResult.rows[0].id;
 
     // add the products to the order details table
     Object.keys(order).forEach(async (productId) => {
-      const quantity = order[productId]
+      const quantity = order[productId];
 
       await db.query(
         `
@@ -49,10 +51,10 @@ class Order {
         VALUES ($1, $2, $3)
       `,
         [orderId, productId, quantity]
-      )
-    })
+      );
+    });
 
-    return await Order.fetchOrderById(orderId)
+    return await Order.fetchOrderById(orderId);
   }
 
   static async fetchOrderById(orderId) {
@@ -69,10 +71,10 @@ class Order {
       WHERE orders.id = $1
     `,
       [orderId]
-    )
+    );
 
-    return result.rows
+    return result.rows;
   }
 }
 
-module.exports = Order
+module.exports = Order;

@@ -49,6 +49,5 @@ CREATE TABLE order_details (
   order_id    INTEGER NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
   product_id  INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
   quantity    INTEGER NOT NULL DEFAULT 1,
-  discount    INTEGER,
   PRIMARY KEY (order_id, product_id)
 );

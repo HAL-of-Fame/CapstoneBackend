@@ -5,9 +5,11 @@ const jwt = require("jsonwebtoken")
 const { SECRET_KEY } = require("../config")
 const { UnauthorizedError } = require("../utils/errors")
 
+
+//  Extracts the JWT from request header
 const jwtFrom = ({ headers }) => {
   if (headers?.authorization) {
-    // Authorization: "Bearer asgewgewg"
+    // Authorization: "Bearer asgewgewg". The split will split the "asgewgewg"
     const [scheme, token] = headers.authorization.split(" ")
     if (scheme.trim() === "Bearer") {
       return token
@@ -51,8 +53,9 @@ const requireAuthenticatedUser = (req, res, next) => {
   try {
     const { user } = res.locals
     if (!user?.email) throw new UnauthorizedError()
+    // if user and or user.email doesn't exist then throw unauthorized error
     return next()
-  } catch (error) {
+  } catch (error) { 
     return next(error)
   }
 }

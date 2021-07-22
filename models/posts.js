@@ -9,6 +9,7 @@ class Post {
       SELECT p.id,
              p.title,
              p.text,
+             p.genre,
              p.user_id AS "userId",
              u.email AS "userEmail",
              AVG(r.rating) AS "rating",
@@ -36,6 +37,7 @@ class Post {
       `
       SELECT p.id,
              p.title,
+             p.genre,
              p.text,
              p.user_id AS "userId",
              u.email AS "userEmail",
@@ -62,7 +64,7 @@ class Post {
 
   // create a new post
   static async createNewPost({ post, user }) {
-    const requiredFields = ["title", "text"];
+    const requiredFields = ["title", "text", "genre"];
     requiredFields.forEach((field) => {
       if (!post.hasOwnProperty(field)) {
         throw new BadRequestError(
@@ -76,16 +78,17 @@ class Post {
     }
     const results = await db.query(
       `
-      INSERT INTO posts (text, user_id, title)
-      VALUES ($1, $2, $3)
+      INSERT INTO posts (text, user_id, title, genre)
+      VALUES ($1, $2, $3, $4)
       RETURNING id AS "primaryKey",
                 user_id,
                 title,
                 text,
+                genre,
                 created_at AS "createdAt",
                 updated_at AS "updatedAt"  
                 `,
-      [post.text, user.id, post.title]
+      [post.text, user.id, post.title, post.genre]
     );
     return results.rows[0];
   }

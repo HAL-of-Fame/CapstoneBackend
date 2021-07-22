@@ -92,7 +92,11 @@ class Post {
 
   // edit a new post
   static async editPost({ postId, postUpdate }) {
-    const requiredFields = ["title", "text"];
+    console.log("inside edit post model postUpdate", postUpdate)
+    console.log('title', postUpdate.title)
+    // console.log(postUpdate.hasOwnProperty('postUpdate'))
+    const requiredFields = ["text", "title"];
+    // postUpdate.forEach((field) => {console.log(field)})
     requiredFields.forEach((field) => {
       if (!postUpdate.hasOwnProperty(field)) {
         throw new BadRequestError(
@@ -100,20 +104,22 @@ class Post {
         );
       }
     });
+    console.log("i made it past the conditional")
     const results = await db.query(
       `
       UPDATE posts 
       SET text = $1,
-          title = $3,
+          title = $2,
         updated_at = NOW()
-      WHERE id = $2
+      WHERE id = $3
       RETURNING id,
+                title,
                 text,
                 user_id AS "userId",
                 created_at AS "createdAt",
                 updated_at AS "updatedAt"
       `,
-      [postUpdate.text, postId, postUpdate.title]
+      [postUpdate.text, postUpdate.title, postId]
     );
     return results.rows[0];
   }

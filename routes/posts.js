@@ -55,6 +55,7 @@ router.patch(
   async function (req, res, next) {
     try {
       const { postId } = req.params;
+      console.log('inside routes req.params', req.body)
       const post = await Post.editPost({ postUpdate: req.body, postId });
       return res.status(200).json({ post });
     } catch (err) {

@@ -8,7 +8,7 @@ CREATE TABLE users (
     is_admin    BOOLEAN NOT NULL DEFAULT FALSE
 );
 
-CREATE TYPE genreOptions AS ENUM ('Action', 'Comedy', 'Romance', 'Drama', 'Science Fiction', 'Horror');
+CREATE TYPE genreOptions AS ENUM ('Action', 'Comedy', 'Romance', 'Drama', 'Science-Fiction', 'Horror');
 CREATE TABLE posts (
   id          SERIAL PRIMARY KEY,
   title       VARCHAR(140) NOT NULL,

@@ -36,7 +36,7 @@ CREATE TABLE products (
   image       TEXT,
   description TEXT NOT NULL,
   -- store price in centers with bigint data type
-  price       BIGINT NOT NULL
+  price       INTEGER NOT NULL
 );
 
 CREATE TABLE orders (

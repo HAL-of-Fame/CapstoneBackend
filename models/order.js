@@ -30,11 +30,6 @@ class Order {
     }
     console.log(order);
     // create a new order
-    // const customId = await db.query(
-    //   `
-
-    //   `
-    // )
     const orderResult = await db.query(
       `
       INSERT INTO orders (customer_id) 
@@ -46,15 +41,6 @@ class Order {
     console.log(orderResult);
     console.log(typeof orderResult.rows[0].id);
     // get orderId
-    // const orderid = await db.query(
-    //   `
-    //   SELECT id
-    //   FROM orders
-    //   WHERE customer_id = (SELECT id FROM users WHERE email = $1)
-    //   `,
-    //   [user.email]
-    // );
-    // console.log(orderid);
     const orderId = orderResult.rows[0].id;
     console.log("orderid", orderId);
     // add the products to the order details table

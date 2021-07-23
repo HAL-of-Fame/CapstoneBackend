@@ -62,6 +62,10 @@ class Post {
     return post;
   }
 
+
+
+
+
   // create a new post
   static async createNewPost({ post, user }) {
     const requiredFields = ["title", "text", "genre"];

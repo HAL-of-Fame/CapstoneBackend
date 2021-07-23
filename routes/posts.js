@@ -15,7 +15,6 @@ router.post(
   async function (req, res, next) {
     try {
       const { user } = res.locals;
-      // console.log("req.body in routes", req.body)
       const post = await Post.createNewPost({ user, post: req.body });
       return res.status(200).json({ post });
     } catch (err) {
@@ -45,6 +44,7 @@ router.get("/:postId", async function (req, res, next) {
   }
 });
 
+
 // update a post. first security ensures that the user is authenticated
 // second security ensures that that user is the owner of that post
 // patch request for partial updates. put requests for full updates
@@ -55,7 +55,6 @@ router.patch(
   async function (req, res, next) {
     try {
       const { postId } = req.params;
-      console.log('inside routes req.params', req.body)
       const post = await Post.editPost({ postUpdate: req.body, postId });
       return res.status(200).json({ post });
     } catch (err) {

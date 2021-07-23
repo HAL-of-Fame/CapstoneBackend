@@ -14,7 +14,7 @@ router.get("/", security.requireAuthenticatedUser, async (req, res, next) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", security.requireAuthenticatedUser, async (req, res, next) => {
   //returns json wehre new order is stored
   try {
     const user = req.body.user;

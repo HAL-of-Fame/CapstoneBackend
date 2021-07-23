@@ -14,13 +14,10 @@ router.get("/", security.requireAuthenticatedUser, async (req, res, next) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", security.requireAuthenticatedUser, async (req, res, next) => {
   //returns json wehre new order is stored
-  console.log(req);
   try {
     const user = req.body.user;
-    console.log(user);
-    console.log(req.body.order.id);
     const order = await Order.createOrder({ order: req.body.order, user });
     return res.status(201).json({ order });
   } catch (err) {

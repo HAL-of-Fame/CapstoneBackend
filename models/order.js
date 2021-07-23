@@ -28,7 +28,7 @@ class Order {
     if (!user) {
       throw new BadRequestError("No user provided");
     }
-
+    console.log(order);
     // create a new order
     const orderResult = await db.query(
       `
@@ -38,12 +38,15 @@ class Order {
     `,
       [user.email]
     );
+    console.log(orderResult);
+    console.log(typeof orderResult.rows[0].id);
     // get orderId
     const orderId = orderResult.rows[0].id;
-
+    console.log("orderid", orderId);
     // add the products to the order details table
-    Object.keys(order).forEach(async (productId) => {
-      const quantity = order[productId];
+    order.forEach(async (product) => {
+      const productId = product.id;
+      const quantity = product.quantity;
 
       await db.query(
         `

@@ -9,6 +9,7 @@ const security = require("./middleware/security");
 const storeRoutes = require("./routes/store");
 const postRoutes = require("./routes/posts");
 const genreRoutes = require("./routes/genre");
+const commentRoutes = require("./routes/comments")
 const app = express();
 
 app.use(cors());
@@ -24,6 +25,7 @@ app.use("/store", storeRoutes);
 app.use("/orders", orderRoutes);
 app.use("/posts", postRoutes);
 app.use("/genre", genreRoutes);
+app.use("/comments", commentRoutes)
 
 // if endpoint doesn't exist then will send to NotFoundError. Handles 404 errors
 // basically it tries going through /auth and then /exercise. if None of those work

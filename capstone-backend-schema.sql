@@ -20,6 +20,18 @@ CREATE TABLE posts (
   FOREIGN KEY  (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+CREATE TABLE comments (
+  id          SERIAL PRIMARY KEY,
+  text        TEXT NOT NULL,     
+  user_id     INTEGER NOT NULL,
+  created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+  post_id     INTEGER NOT NULL,
+  FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,
+  FOREIGN KEY  (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+
 
 CREATE TABLE ratings (
   rating      INTEGER NOT NULL CHECK (rating > 0 AND rating <= 5),

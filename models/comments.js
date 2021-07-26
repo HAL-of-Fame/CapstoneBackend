@@ -30,11 +30,12 @@ class Comment {
   // LEFT JOIN ratings AS r ON r.post_id = p.id will get all the posts that even have 0 ratings
 
   // fetch a single comment
-  static async fetchCommentById(postId) {
+  static async fetchCommentById(commentId) {
     const results = await db.query(
       `
       SELECT c.id,
              c.text,
+             c.post_id,
              c.user_id AS "userId",
              u.email AS "userEmail",
              u.username AS "userName",
@@ -45,7 +46,7 @@ class Comment {
       WHERE c.id = $1
       GROUP BY c.id, u.username, u.email
     `,
-      [postId]
+      [commentId]
     );
     const comment = results.rows[0];
 
@@ -83,7 +84,7 @@ class Comment {
   }
 
   // edit a new comment
-  static async editComment({ postId, commentUpdate }) {
+  static async editComment({ commentId, commentUpdate }) {
     const requiredFields = ["text"];
     requiredFields.forEach((field) => {
       if (!commentUpdate.hasOwnProperty(field)) {
@@ -105,18 +106,18 @@ class Comment {
                 created_at AS "createdAt",
                 updated_at AS "updatedAt"
       `,
-      [commentUpdate.text, postId]
+      [commentUpdate.text, commentId]
     );
     return results.rows[0];
   }
 
-  static async deletePostById(postId) {
+  static async deleteCommentById(commentId) {
     const results = await db.query(
       `
       DELETE FROM comments
       WHERE id = $1
     `,
-      [postId]
+      [commentId]
     );
     const comment = results.rows[0];
     return comment;

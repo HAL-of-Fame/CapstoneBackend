@@ -21,7 +21,7 @@ router.post(
         postId,
         comment: req.body,
       });
-      console.log("result", comment)
+    //   console.log("result", comment)
       return res.status(200).json({ comment });
     } catch (err) {
       next(err);
@@ -30,30 +30,28 @@ router.post(
 );
 
 // fetch single comment 
-router.get("/:postId/detail", async function (req, res, next) {
+router.get("/:commentId/detail", async function (req, res, next) {
   try {
-    const { postId } = req.params;
-    const comment = await Comment.fetchCommentById(postId);
+    const { commentId } = req.params;
+    const comment = await Comment.fetchCommentById(commentId);
     return res.status(200).json({ comment });
   } catch (err) {
     next(err);
   }
 });
-// update a post. first security ensures that the user is authenticated
-// second security ensures that that user is the owner of that post
-// patch request for partial updates. put requests for full updates
+
+//update a comment
 router.patch(
-  "/:postId/edit",
+  "/:commentId/edit",
   security.requireAuthenticatedUser,
   permissions.authUserOwnsComment,
   async function (req, res, next) {
       console.log('inside patch')
     try {
-        const { postId } = req.params;
-        console.log(postId)
+        const { commentId } = req.params;
       const comment = await Comment.editComment({
         commentUpdate: req.body,
-        postId,
+        commentId,
       });
       return res.status(200).json({ comment });
     } catch (err) {
@@ -79,13 +77,13 @@ router.get("/:postId/", async function (req, res, next) {
 
 // delete a specfic comment with an id
 router.delete(
-  "/:postId/detail/delete",
+  "/:commentId/delete",
   security.requireAuthenticatedUser,
   permissions.authUserOwnsComment,
   async function (req, res, next) {
     try {
-      const { postId } = req.params;
-      const comment = await Comment.deleteCommentById(postId);
+      const { commentId } = req.params;
+      const comment = await Comment.deleteCommentById(commentId);
       return res.status(200).json({ message: "comment deleted" });
     } catch (err) {
       next(err);

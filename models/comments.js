@@ -16,17 +16,18 @@ class Comment {
              c.updated_at AS "updatedAt"
       FROM comments AS c
       LEFT JOIN users AS u ON u.id = c.user_id
-      GROUP BY c.id, u.email, u.username
+      WHERE c.post_id = $1
+    GROUP BY c.id, u.email, u.username
       ORDER BY c.created_at DESC
-      `
+      `,
+      [postId]
     );
     return results.rows;
   }
-  // if you keep the join ratings then it'll only show all the posts that have 
+  // if you keep the join ratings then it'll only show all the posts that have
   // been rated. JOIN ratings AS r ON r.user_id = p.user_id
   // r.rating AS "postRating",
   // LEFT JOIN ratings AS r ON r.post_id = p.id will get all the posts that even have 0 ratings
-
 
   // fetch a single comment
   static async fetchCommentById(postId) {
@@ -54,16 +55,8 @@ class Comment {
     return comment;
   }
 
-
-
-
-
   // create a new comment
   static async createNewComment({ comment, user, postId }) {
-      console.log(comment)
-      console.log(user)
-      console.log(postId)
-      console.log("i am here")
     const requiredFields = ["text"];
     requiredFields.forEach((field) => {
       if (!comment.hasOwnProperty(field)) {
@@ -89,36 +82,30 @@ class Comment {
     return results.rows[0];
   }
 
-  // edit a new post
-  static async editPost({ postId, postUpdate }) {
-    console.log("inside edit post model postUpdate", postUpdate)
-    console.log('title', postUpdate.title)
-    // console.log(postUpdate.hasOwnProperty('postUpdate'))
-    const requiredFields = ["text", "title"];
-    // postUpdate.forEach((field) => {console.log(field)})
+  // edit a new comment
+  static async editComment({ postId, commentUpdate }) {
+    const requiredFields = ["text"];
     requiredFields.forEach((field) => {
-      if (!postUpdate.hasOwnProperty(field)) {
+      if (!commentUpdate.hasOwnProperty(field)) {
         throw new BadRequestError(
           `Required field - ${field} - missing from request body`
         );
       }
     });
-    console.log("i made it past the conditional")
     const results = await db.query(
       `
-      UPDATE posts 
+      UPDATE comments 
       SET text = $1,
-          title = $2,
         updated_at = NOW()
-      WHERE id = $3
+      WHERE id = $2
       RETURNING id,
-                title,
                 text,
                 user_id AS "userId",
+                post_id AS "postId",
                 created_at AS "createdAt",
                 updated_at AS "updatedAt"
       `,
-      [postUpdate.text, postUpdate.title, postId]
+      [commentUpdate.text, postId]
     );
     return results.rows[0];
   }
@@ -126,13 +113,13 @@ class Comment {
   static async deletePostById(postId) {
     const results = await db.query(
       `
-      DELETE FROM posts
+      DELETE FROM comments
       WHERE id = $1
     `,
       [postId]
     );
-    const post = results.rows[0];
-    return post;
+    const comment = results.rows[0];
+    return comment;
   }
 }
 

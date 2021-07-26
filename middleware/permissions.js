@@ -42,15 +42,11 @@ const authUserIsNotPostOwner = async (req, res, next) => {
 const authUserOwnsComment = async (req, res, next) => {
     try {
         const { user } = res.locals
-        const { postId } = req.params
-        console.log("user", user)
-        console.log(postId)
-        const comment = await Comment.fetchCommentById(postId)
-        console.log('comment', comment)
+        const { commentId } = req.params
+        const comment = await Comment.fetchCommentById(commentId)
         if (comment.userEmail !== user.email) {
             throw new ForbiddenError(`${user.username} is not allowed to update ${comment.userName}'s posts`)
         }
-        console.log('res.locals', res.locals)
         res.locals.comment = comment
         return next()
     } catch(err) {
@@ -63,8 +59,8 @@ const authUserOwnsComment = async (req, res, next) => {
 const authUserIsNotCommentOwner = async (req, res, next) => {
     try {
         const { user } = res.locals
-        const { postId } = req.params
-        const comment = await Comment.fetchCommentById(postId)
+        const { commentId } = req.params
+        const comment = await Comment.fetchCommentById(commentId)
  
         if (post.userEmail == user.email) {
             throw new BadRequestError(`Users are not allowed to rate their own posts`)

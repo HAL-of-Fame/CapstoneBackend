@@ -3,24 +3,21 @@ const { BadRequestError, NotFoundError } = require("../utils/errors");
 
 class Comment {
   // list all comments in db in descending order of creation
-  static async listPosts() {
+  static async listComments(postId) {
     const results = await db.query(
       `
-      SELECT p.id,
-             p.title,
-             p.text,
-             p.genre,
-             p.user_id AS "userId",
-             u.email AS "userEmail",
-             AVG(r.rating) AS "rating",
-             COUNT(r.rating) AS "totalRatings",
-             p.created_at AS "createdAt",
-             p.updated_at AS "updatedAt"
-      FROM posts AS p
-      LEFT JOIN users AS u ON u.id = p.user_id
-      LEFT JOIN ratings AS r ON r.post_id = p.id
-      GROUP BY p.id, u.email
-      ORDER BY p.created_at DESC
+      SELECT c.id,
+             c.text,
+             c.post_id,
+             c.user_id AS "userId",
+             u.email AS "userEmail",    
+             u.username AS "userName",   
+             c.created_at AS "createdAt",
+             c.updated_at AS "updatedAt"
+      FROM comments AS c
+      LEFT JOIN users AS u ON u.id = c.user_id
+      GROUP BY c.id, u.email, u.username
+      ORDER BY c.created_at DESC
       `
     );
     return results.rows;
@@ -31,35 +28,30 @@ class Comment {
   // LEFT JOIN ratings AS r ON r.post_id = p.id will get all the posts that even have 0 ratings
 
 
-  // fetch a single post
-  static async fetchPostById(postId) {
+  // fetch a single comment
+  static async fetchCommentById(postId) {
     const results = await db.query(
       `
-      SELECT p.id,
-             p.title,
-             p.genre,
-             p.text,
-             p.user_id AS "userId",
+      SELECT c.id,
+             c.text,
+             c.user_id AS "userId",
              u.email AS "userEmail",
-             AVG(r.rating) AS "rating",
-             COUNT(r.rating) AS "totalRatings",
              u.username AS "userName",
-             p.created_at AS "createdAt",
-             p.updated_at AS "updatedAt"
-      FROM posts AS p
-          LEFT JOIN users AS u ON u.id = p.user_id
-          LEFT JOIN ratings AS r ON r.post_id = p.id
-      WHERE p.id = $1
-      GROUP BY p.id, u.username, u.email
+             c.created_at AS "createdAt",
+             c.updated_at AS "updatedAt"
+      FROM comments AS c
+          LEFT JOIN users AS u ON u.id = c.user_id
+      WHERE c.id = $1
+      GROUP BY c.id, u.username, u.email
     `,
       [postId]
     );
-    const post = results.rows[0];
+    const comment = results.rows[0];
 
-    if (!post) {
+    if (!comment) {
       throw new NotFoundError();
     }
-    return post;
+    return comment;
   }
 
 

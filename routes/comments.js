@@ -8,7 +8,7 @@ const { createUserJwt } = require("../utils/tokens"); // to generate JWT tokens
 const permissions = require("../middleware/permissions");
 const Comment = require("../models/comments");
 
-// create a new comment
+// create a new comment - DONE
 router.post(
   "/:postId",
   security.requireAuthenticatedUser,
@@ -31,21 +31,23 @@ router.post(
   }
 );
 
-// fetch all comments
-router.get("/", async function (req, res, next) {
+// fetch all comments at that postId - DONE
+router.get("/:postId", async function (req, res, next) {
   try {
-    const comments = await Comment.listPosts();
+    const { postId } = req.params;
+    const comments = await Comment.listComments({postId});
     return res.status(200).json({ comments });
   } catch (err) {
     next(err);
   }
 });
 
-// fetch single post
-router.get("/:postId", async function (req, res, next) {
+// fetch single comment 
+router.get("/:postId/detail", async function (req, res, next) {
   try {
     const { postId } = req.params;
-    const comment = await Comment.fetchPostById(postId);
+    console.log("postId is", postId)
+    const comment = await Comment.fetchCommentById(postId);
     return res.status(200).json({ comment });
   } catch (err) {
     next(err);

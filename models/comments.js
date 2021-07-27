@@ -58,14 +58,10 @@ class Comment {
 
   // create a new comment
   static async createNewComment({ comment, user, postId }) {
-    const requiredFields = ["text"];
-    requiredFields.forEach((field) => {
-      if (!comment.hasOwnProperty(field)) {
-        throw new BadRequestError(
-          `Required field - ${field} - missing from request body`
-        );
-      }
-    });
+    console.log("comment", comment)
+    console.log("user", user.id)
+    console.log("postId", postId)
+
 
     const results = await db.query(
       `
@@ -78,8 +74,9 @@ class Comment {
                 created_at AS "createdAt",
                 updated_at AS "updatedAt"  
                 `,
-      [comment.text, user.id, postId]
+      [comment, user.id, postId]
     );
+    console.log("results", results.rows[0])
     return results.rows[0];
   }
 

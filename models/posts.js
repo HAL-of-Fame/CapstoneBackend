@@ -25,11 +25,10 @@ class Post {
     );
     return results.rows;
   }
-  // if you keep the join ratings then it'll only show all the posts that have 
+  // if you keep the join ratings then it'll only show all the posts that have
   // been rated. JOIN ratings AS r ON r.user_id = p.user_id
   // r.rating AS "postRating",
   // LEFT JOIN ratings AS r ON r.post_id = p.id will get all the posts that even have 0 ratings
-
 
   // fetch a single post
   static async fetchPostById(postId) {
@@ -61,10 +60,6 @@ class Post {
     }
     return post;
   }
-
-
-
-
 
   // create a new post
   static async createNewPost({ post, user }) {
@@ -99,8 +94,8 @@ class Post {
 
   // edit a new post
   static async editPost({ postId, postUpdate }) {
-    console.log("inside edit post model postUpdate", postUpdate)
-    console.log('title', postUpdate.title)
+    // console.log("inside edit post model postUpdate", postUpdate)
+    // console.log('title', postUpdate.title)
     // console.log(postUpdate.hasOwnProperty('postUpdate'))
     const requiredFields = ["text", "title"];
     // postUpdate.forEach((field) => {console.log(field)})
@@ -111,7 +106,7 @@ class Post {
         );
       }
     });
-    console.log("i made it past the conditional")
+
     const results = await db.query(
       `
       UPDATE posts 
@@ -136,10 +131,18 @@ class Post {
       `
       DELETE FROM posts
       WHERE id = $1
+      RETURNING id AS "primaryKey",
+      user_id,
+      title,
+      text,
+      genre,
+      created_at AS "createdAt",
+      updated_at AS "updatedAt"  
     `,
       [postId]
     );
     const post = results.rows[0];
+    console.log("results at the end", results.rows[0]);
     return post;
   }
 }

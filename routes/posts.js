@@ -72,7 +72,7 @@ router.delete(
     try {
       const { postId } = req.params;
       const post = await Post.deletePostById(postId);
-      return res.status(200).json({ message: "post deleted" });
+      return res.status(200).json({ post });
     } catch (err) {
       next(err);
     }

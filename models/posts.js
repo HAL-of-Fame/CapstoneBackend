@@ -10,6 +10,7 @@ class Post {
              p.title,
              p.text,
              p.genre,
+             p.movieName,
              p.user_id AS "userId",
              u.email AS "userEmail",
              AVG(r.rating) AS "rating",
@@ -63,6 +64,7 @@ class Post {
 
   // create a new post
   static async createNewPost({ post, user }) {
+    console.log('post', post)
     const requiredFields = ["title", "text", "genre"];
     requiredFields.forEach((field) => {
       if (!post.hasOwnProperty(field)) {
@@ -75,6 +77,29 @@ class Post {
     if (post.title.length > 140) {
       throw new BadRequestError(`Title text must be 140 characters or less`);
     }
+
+    if (post.movieName) {
+      // console.log('movieName', post.movieName)
+      const results = await db.query(
+        `
+        INSERT INTO posts (text, user_id, title, genre, movieName)
+        VALUES ($1, $2, $3, $4, $5)
+        RETURNING id AS "primaryKey",
+                  user_id,
+                  title,
+                  text,
+                  genre,
+                  movieName,
+                  created_at AS "createdAt",
+                  updated_at AS "updatedAt"  
+                  `,
+        [post.text, user.id, post.title, post.genre, post.movieName]
+      );
+      return results.rows[0];
+    }
+  
+
+
     const results = await db.query(
       `
       INSERT INTO posts (text, user_id, title, genre)
@@ -84,6 +109,7 @@ class Post {
                 title,
                 text,
                 genre,
+                movieName,
                 created_at AS "createdAt",
                 updated_at AS "updatedAt"  
                 `,

@@ -26,6 +26,32 @@ class Post {
     );
     return results.rows;
   }
+
+// list all posts based on movieName
+static async listPostsFromMovieName(movieName) {
+  const results = await db.query(
+    `
+    SELECT p.id,
+           p.title,
+           p.text,
+           p.user_id AS "userId",
+           u.email AS "userEmail",    
+           u.username AS "userName",   
+           p.created_at AS "createdAt",
+           p.updated_at AS "updatedAt"
+    FROM posts AS p
+    LEFT JOIN users AS u ON u.id = p.user_id
+    WHERE p.movieName = $1
+  GROUP BY p.id, u.email, u.username
+    ORDER BY p.created_at DESC
+    `,
+    [movieName]
+  );
+  return results.rows;
+}
+
+
+
   // if you keep the join ratings then it'll only show all the posts that have
   // been rated. JOIN ratings AS r ON r.user_id = p.user_id
   // r.rating AS "postRating",
@@ -64,7 +90,7 @@ class Post {
 
   // create a new post
   static async createNewPost({ post, user }) {
-    console.log('post', post)
+    // console.log('post', post)
     const requiredFields = ["title", "text", "genre"];
     requiredFields.forEach((field) => {
       if (!post.hasOwnProperty(field)) {
@@ -78,7 +104,7 @@ class Post {
       throw new BadRequestError(`Title text must be 140 characters or less`);
     }
 
-    if (post.movieName) {
+    // if (post.movieName) {
       // console.log('movieName', post.movieName)
       const results = await db.query(
         `
@@ -93,29 +119,29 @@ class Post {
                   created_at AS "createdAt",
                   updated_at AS "updatedAt"  
                   `,
-        [post.text, user.id, post.title, post.genre, post.movieName]
+        [post.text, user.id, post.title, post.genre, post.movieName || null]
       );
       return results.rows[0];
-    }
+    // }
   
 
 
-    const results = await db.query(
-      `
-      INSERT INTO posts (text, user_id, title, genre)
-      VALUES ($1, $2, $3, $4)
-      RETURNING id AS "primaryKey",
-                user_id,
-                title,
-                text,
-                genre,
-                movieName,
-                created_at AS "createdAt",
-                updated_at AS "updatedAt"  
-                `,
-      [post.text, user.id, post.title, post.genre]
-    );
-    return results.rows[0];
+    // const results = await db.query(
+    //   `
+    //   INSERT INTO posts (text, user_id, title, genre)
+    //   VALUES ($1, $2, $3, $4)
+    //   RETURNING id AS "primaryKey",
+    //             user_id,
+    //             title,
+    //             text,
+    //             genre,
+    //             movieName,
+    //             created_at AS "createdAt",
+    //             updated_at AS "updatedAt"  
+    //             `,
+    //   [post.text, user.id, post.title, post.genre]
+    // );
+    // return results.rows[0];
   }
 
   // edit a new post

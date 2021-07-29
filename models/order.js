@@ -38,12 +38,43 @@ class Order {
     `,
       [user.email]
     );
-    console.log(orderResult);
-    console.log(typeof orderResult.rows[0].id);
+    // console.log(orderResult);
+    // console.log(typeof orderResult.rows[0].id);
     // get orderId
     const orderId = orderResult.rows[0].id;
-    console.log("orderid", orderId);
+    // console.log("orderid", orderId);
     // add the products to the order details table
+    order.forEach(async (product) => {
+      const productId = product.id;
+      const name = product.name;
+      const price = product.price;
+      const image = product.image;
+      const list = await db.query(
+        `
+        SELECT id FROM products
+      `
+      );
+      //use list.rows[] and do a for loop to check if each element in the list is equal to the product id
+      console.log("list lenght", list.rows.length);
+      console.log("list", list.rows);
+      console.log("resulkt0", list);
+      let found = false;
+      for (let i = 0; i < list.rows.length; i++) {
+        if (list.rows[i].id === productId) {
+          found = true;
+          break;
+        }
+      }
+      if (found === false) {
+        await db.query(
+          `INSERT INTO products (id, name, image, price)
+            VALUES ($1, $2, $3, $4)
+            RETURNING (id, name, image, price)`,
+          [productId, name, image, price]
+        );
+      }
+    });
+
     order.forEach(async (product) => {
       const productId = product.id;
       const quantity = product.quantity;

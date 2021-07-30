@@ -33,6 +33,18 @@ router.get("/", async function (req, res, next) {
   }
 });
 
+
+// fetch all posts from a movie
+router.get("/movieposts/:movieName", async function (req, res, next) {
+  const { movieName } = req.params;
+  try {
+    const posts = await Post.listPostsFromMovieName(movieName);
+    return res.status(200).json({ posts });
+  } catch (err) {
+    next(err);
+  }
+});
+
 // fetch single post
 router.get("/:postId", async function (req, res, next) {
   try {

@@ -7,7 +7,9 @@ class Genre {
     const results = await db.query(
         `SELECT id, title, genre, text
          FROM posts
-         WHERE genre = $1`,
+         WHERE genre = $1
+         ORDER BY updated_at DESC
+         `,
       [genre]
     );
     const threads = results.rows;

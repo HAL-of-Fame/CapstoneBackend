@@ -12,8 +12,8 @@ class Comment {
              c.user_id AS "userId",
              u.email AS "userEmail",    
              u.username AS "userName",   
-             c.created_at AS "createdAt",
-             c.updated_at AS "updatedAt"
+             c.created_at,
+             c.updated_at
       FROM comments AS c
       LEFT JOIN users AS u ON u.id = c.user_id
       WHERE c.post_id = $1
@@ -39,8 +39,8 @@ class Comment {
              c.user_id AS "userId",
              u.email AS "userEmail",
              u.username AS "userName",
-             c.created_at AS "createdAt",
-             c.updated_at AS "updatedAt"
+             c.created_at,
+             c.updated_at
       FROM comments AS c
           LEFT JOIN users AS u ON u.id = c.user_id
       WHERE c.id = $1
@@ -71,8 +71,8 @@ class Comment {
                 user_id,
                 post_id,
                 text,
-                created_at AS "createdAt",
-                updated_at AS "updatedAt"  
+                created_at,
+                updated_at
                 `,
       [comment, user.id, postId]
     );
@@ -100,8 +100,8 @@ class Comment {
                 text,
                 user_id AS "userId",
                 post_id AS "postId",
-                created_at AS "createdAt",
-                updated_at AS "updatedAt"
+                created_at,
+                updated_at
       `,
       [commentUpdate.text, commentId]
     );

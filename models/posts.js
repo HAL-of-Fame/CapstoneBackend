@@ -15,8 +15,8 @@ class Post {
              u.email AS "userEmail",
              AVG(r.rating) AS "rating",
              COUNT(r.rating) AS "totalRatings",
-             p.created_at AS "createdAt",
-             p.updated_at AS "updatedAt"
+             p.created_at,
+             p.updated_at
       FROM posts AS p
       LEFT JOIN users AS u ON u.id = p.user_id
       LEFT JOIN ratings AS r ON r.post_id = p.id
@@ -37,8 +37,8 @@ static async listPostsFromMovieName(movieName) {
            p.user_id AS "userId",
            u.email AS "userEmail",    
            u.username AS "userName",   
-           p.created_at AS "createdAt",
-           p.updated_at AS "updatedAt"
+           p.created_at,
+           p.updated_at
     FROM posts AS p
     LEFT JOIN users AS u ON u.id = p.user_id
     WHERE p.movieName = $1
@@ -70,8 +70,8 @@ static async listPostsFromMovieName(movieName) {
              AVG(r.rating) AS "rating",
              COUNT(r.rating) AS "totalRatings",
              u.username AS "userName",
-             p.created_at AS "createdAt",
-             p.updated_at AS "updatedAt"
+             p.created_at,
+             p.updated_at
       FROM posts AS p
           LEFT JOIN users AS u ON u.id = p.user_id
           LEFT JOIN ratings AS r ON r.post_id = p.id

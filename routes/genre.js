@@ -12,9 +12,9 @@ const Genre = require("../models/genre");
 router.get("/:genre", async function (req, res, next) {
     try {
       const { genre } = req.params;
-      console.log("this is genre", genre)
+      // console.log("this is genre", genre)
       const threads = await Genre.fetchAllPostsByGenre(genre);
-      console.log("this is threads", threads)
+      // console.log("this is threads", threads)
       return res.status(200).json({ threads });
     } catch (err) {
       next(err);

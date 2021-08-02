@@ -8,6 +8,7 @@ class Genre {
         `SELECT p.id, 
                 p.title, 
                 p.genre, 
+                p.moviePoster,
                 p.text, 
                 p.created_at,
                 p.updated_at,

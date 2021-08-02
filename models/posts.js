@@ -11,6 +11,7 @@ class Post {
              p.text,
              p.genre,
              p.movieName,
+             p.moviePoster,
              p.user_id AS "userId",
              u.email AS "userEmail",
              AVG(r.rating) AS "rating",
@@ -34,6 +35,8 @@ static async listPostsFromMovieName(movieName) {
     SELECT p.id,
            p.title,
            p.text,
+           p.genre,
+           p.moviePoster,
            p.user_id AS "userId",
            u.email AS "userEmail",    
            u.username AS "userName",   
@@ -108,18 +111,19 @@ static async listPostsFromMovieName(movieName) {
       // console.log('movieName', post.movieName)
       const results = await db.query(
         `
-        INSERT INTO posts (text, user_id, title, genre, movieName)
-        VALUES ($1, $2, $3, $4, $5)
+        INSERT INTO posts (text, user_id, title, genre, movieName, moviePoster)
+        VALUES ($1, $2, $3, $4, $5, $6)
         RETURNING id AS "primaryKey",
                   user_id,
                   title,
                   text,
                   genre,
                   movieName,
+                  moviePoster,
                   created_at AS "createdAt",
                   updated_at AS "updatedAt"  
                   `,
-        [post.text, user.id, post.title, post.genre, post.movieName || null]
+        [post.text, user.id, post.title, post.genre, post.movieName || null, post.moviePoster || null]
       );
       return results.rows[0];
     // }
@@ -194,7 +198,6 @@ static async listPostsFromMovieName(movieName) {
       [postId]
     );
     const post = results.rows[0];
-    console.log("results at the end", results.rows[0]);
     return post;
   }
 }

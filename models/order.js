@@ -14,6 +14,7 @@ class Order {
         JOIN order_details AS od ON od.order_id = orders.id
         JOIN products ON products.id = od.product_id
       WHERE orders.customer_id = (SELECT id FROM users WHERE email = $1)
+     
     `;
     const result = await db.query(query, [user.email]);
 

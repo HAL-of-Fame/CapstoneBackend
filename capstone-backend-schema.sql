@@ -14,6 +14,7 @@ CREATE TABLE posts (
   title       VARCHAR(140) NOT NULL,
   genre       genreOptions,
   movieName   TEXT DEFAULT NULL,
+  moviePoster TEXT DEFAULT NULL,
   text        TEXT NOT NULL,     
   user_id     INTEGER NOT NULL,
   created_at  TIMESTAMP NOT NULL DEFAULT NOW(),

@@ -1,4 +1,10 @@
 -- Seed database with default products
+INSERT INTO users (email, password, username, first_name, last_name)
+VALUES ('test@gmail.com',
+    'pw',
+    'test',
+    'testname',
+    'testlastname');
 
 INSERT INTO products (name, image, description, price)
 VALUES ('T-shirt',

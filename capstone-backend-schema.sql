@@ -49,7 +49,7 @@ CREATE TABLE products (
   id          SERIAL PRIMARY KEY,
   name        TEXT NOT NULL,
   image       TEXT,
-  description TEXT NOT NULL,
+  description TEXT,
   -- store price in centers with bigint data type
   price       INTEGER NOT NULL
 );
@@ -62,7 +62,7 @@ CREATE TABLE orders (
 
 CREATE TABLE order_details (
   order_id    INTEGER NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
-  product_id  INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+  product_id  INTEGER NOT NULL,
   quantity    INTEGER NOT NULL DEFAULT 1,
   PRIMARY KEY (order_id, product_id)
 );

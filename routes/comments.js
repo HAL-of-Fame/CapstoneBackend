@@ -8,11 +8,11 @@ const { createUserJwt } = require("../utils/tokens"); // to generate JWT tokens
 const permissions = require("../middleware/permissions");
 const Comment = require("../models/comments");
 
-// fetch all comments at that postId 
+// fetch all comments at that postId
 router.get("/:postId/", async function (req, res, next) {
   try {
     let { postId } = req.params;
-    postId = Number(postId)
+    postId = Number(postId);
     const comments = await Comment.listComments(postId);
     return res.status(200).json({ comments });
   } catch (err) {
@@ -20,10 +20,10 @@ router.get("/:postId/", async function (req, res, next) {
   }
 });
 
-// create a new comment 
+// create a new comment
 router.post(
-    "/:postId",
-    security.requireAuthenticatedUser,
+  "/:postId",
+  security.requireAuthenticatedUser,
   async function (req, res, next) {
     // console.log("req.params", req.params)
     // console.log("req.body", req.body)
@@ -34,7 +34,7 @@ router.post(
       const { user } = res.locals;
       const comments = await Comment.createNewComment({
         user,
-        postId, 
+        postId,
         comment,
       });
       return res.status(200).json({ comments });
@@ -44,7 +44,7 @@ router.post(
   }
 );
 
-// fetch single comment 
+// fetch single comment
 router.get("/:commentId/detail", async function (req, res, next) {
   try {
     const { commentId } = req.params;
@@ -61,9 +61,9 @@ router.patch(
   security.requireAuthenticatedUser,
   permissions.authUserOwnsComment,
   async function (req, res, next) {
-      console.log('inside patch')
+    console.log("inside patch");
     try {
-        const { commentId } = req.params;
+      const { commentId } = req.params;
       const comment = await Comment.editComment({
         commentUpdate: req.body,
         commentId,
@@ -75,20 +75,19 @@ router.patch(
   }
 );
 
-
-
-
-
 // delete a specfic comment with an id
 router.delete(
   "/:commentId/delete",
   security.requireAuthenticatedUser,
   permissions.authUserOwnsComment,
   async function (req, res, next) {
+    console.log("made it inside router");
     try {
       const { commentId } = req.params;
+      console.log("inside router", commentId);
       const comment = await Comment.deleteCommentById(commentId);
-      return res.status(200).json({ message: "comment deleted" });
+      console.log("after deletecommentbyid", comment);
+      return res.status(200).json({ comment });
     } catch (err) {
       next(err);
     }

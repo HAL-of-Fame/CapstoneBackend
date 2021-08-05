@@ -58,10 +58,9 @@ class Comment {
 
   // create a new comment
   static async createNewComment({ comment, user, postId }) {
-    console.log("comment", comment)
-    console.log("user", user.id)
-    console.log("postId", postId)
-
+    // console.log("comment", comment)
+    // console.log("user", user.id)
+    // console.log("postId", postId)
 
     const results = await db.query(
       `
@@ -76,7 +75,7 @@ class Comment {
                 `,
       [comment, user.id, postId]
     );
-    console.log("results", results.rows[0])
+    // console.log("results", results.rows[0])
     return results.rows[0];
   }
 
@@ -113,6 +112,11 @@ class Comment {
       `
       DELETE FROM comments
       WHERE id = $1
+      RETURNING id AS "primaryKey",
+      user_id,
+      text,
+      created_at AS "createdAt",
+      updated_at AS "updatedAt"
     `,
       [commentId]
     );

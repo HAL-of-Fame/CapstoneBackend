@@ -10,15 +10,13 @@ const Genre = require("../models/genre");
 
 // fetch all posts in a genre
 router.get("/:genre", async function (req, res, next) {
-    try {
-      const { genre } = req.params;
-      // console.log("this is genre", genre)
-      const threads = await Genre.fetchAllPostsByGenre(genre);
-      // console.log("this is threads", threads)
-      return res.status(200).json({ threads });
-    } catch (err) {
-      next(err);
-    }
-  });
+  try {
+    const { genre } = req.params;
+    const threads = await Genre.fetchAllPostsByGenre(genre);
+    return res.status(200).json({ threads });
+  } catch (err) {
+    next(err);
+  }
+});
 
-  module.exports = router
+module.exports = router;

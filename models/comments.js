@@ -58,10 +58,6 @@ class Comment {
 
   // create a new comment
   static async createNewComment({ comment, user, postId }) {
-    // console.log("comment", comment)
-    // console.log("user", user.id)
-    // console.log("postId", postId)
-
     const results = await db.query(
       `
       INSERT INTO comments (text, user_id, post_id)
@@ -75,7 +71,6 @@ class Comment {
                 `,
       [comment, user.id, postId]
     );
-    // console.log("results", results.rows[0])
     return results.rows[0];
   }
 

@@ -92,7 +92,6 @@ class Post {
 
   // create a new post
   static async createNewPost({ post, user }) {
-    // console.log('post', post)
     const requiredFields = ["title", "text", "genre"];
     requiredFields.forEach((field) => {
       if (!post.hasOwnProperty(field)) {
@@ -106,8 +105,6 @@ class Post {
       throw new BadRequestError(`Title text must be 140 characters or less`);
     }
 
-    // if (post.movieName) {
-    // console.log('movieName', post.movieName)
     const results = await db.query(
       `
         INSERT INTO posts (text, user_id, title, genre, movieName, moviePoster)
@@ -154,11 +151,7 @@ class Post {
 
   // edit a new post
   static async editPost({ postId, postUpdate }) {
-    // console.log("inside edit post model postUpdate", postUpdate)
-    // console.log('title', postUpdate.title)
-    // console.log(postUpdate.hasOwnProperty('postUpdate'))
     const requiredFields = ["text", "title"];
-    // postUpdate.forEach((field) => {console.log(field)})
     requiredFields.forEach((field) => {
       if (!postUpdate.hasOwnProperty(field)) {
         throw new BadRequestError(

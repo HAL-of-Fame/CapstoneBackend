@@ -28,10 +28,10 @@ class Post {
     return results.rows;
   }
 
-// list all posts based on movieName
-static async listPostsFromMovieName(movieName) {
-  const results = await db.query(
-    `
+  // list all posts based on movieName
+  static async listPostsFromMovieName(movieName) {
+    const results = await db.query(
+      `
     SELECT p.id,
            p.title,
            p.text,
@@ -48,12 +48,10 @@ static async listPostsFromMovieName(movieName) {
   GROUP BY p.id, u.email, u.username
     ORDER BY p.created_at DESC
     `,
-    [movieName]
-  );
-  return results.rows;
-}
-
-
+      [movieName]
+    );
+    return results.rows;
+  }
 
   // if you keep the join ratings then it'll only show all the posts that have
   // been rated. JOIN ratings AS r ON r.user_id = p.user_id
@@ -68,6 +66,7 @@ static async listPostsFromMovieName(movieName) {
              p.title,
              p.genre,
              p.text,
+             p.moviePoster,
              p.user_id AS "userId",
              u.email AS "userEmail",
              AVG(r.rating) AS "rating",
@@ -108,9 +107,9 @@ static async listPostsFromMovieName(movieName) {
     }
 
     // if (post.movieName) {
-      // console.log('movieName', post.movieName)
-      const results = await db.query(
-        `
+    // console.log('movieName', post.movieName)
+    const results = await db.query(
+      `
         INSERT INTO posts (text, user_id, title, genre, movieName, moviePoster)
         VALUES ($1, $2, $3, $4, $5, $6)
         RETURNING id AS "primaryKey",
@@ -123,12 +122,17 @@ static async listPostsFromMovieName(movieName) {
                   created_at AS "createdAt",
                   updated_at AS "updatedAt"  
                   `,
-        [post.text, user.id, post.title, post.genre, post.movieName || null, post.moviePoster || null]
-      );
-      return results.rows[0];
+      [
+        post.text,
+        user.id,
+        post.title,
+        post.genre,
+        post.movieName || null,
+        post.moviePoster || null,
+      ]
+    );
+    return results.rows[0];
     // }
-  
-
 
     // const results = await db.query(
     //   `
@@ -141,7 +145,7 @@ static async listPostsFromMovieName(movieName) {
     //             genre,
     //             movieName,
     //             created_at AS "createdAt",
-    //             updated_at AS "updatedAt"  
+    //             updated_at AS "updatedAt"
     //             `,
     //   [post.text, user.id, post.title, post.genre]
     // );

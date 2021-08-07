@@ -38,6 +38,7 @@ class Post {
            p.text,
            p.genre,
            p.movieId,
+           p.movieName,
            p.moviePoster,
            p.user_id AS "userId",
            u.email AS "userEmail",    
@@ -68,6 +69,7 @@ class Post {
              p.title,
              p.genre,
              p.text,
+             p.movieName,
              p.movieId,
              p.moviePoster,
              p.user_id AS "userId",
@@ -103,6 +105,14 @@ class Post {
         );
       }
     });
+
+    if (post.title == "") {
+      throw new BadRequestError("Title field must not be blank");
+    }
+
+    if (post.text == "") {
+      throw new BadRequestError("Text field must not be blank");
+    }
 
     if (post.title.length > 140) {
       throw new BadRequestError(`Title text must be 140 characters or less`);

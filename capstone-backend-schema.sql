@@ -13,6 +13,7 @@ CREATE TABLE posts (
   id          SERIAL PRIMARY KEY,
   title       VARCHAR(140) NOT NULL,
   genre       genreOptions,
+  movieId     TEXT DEFAULT NULL,
   movieName   TEXT DEFAULT NULL,
   moviePoster TEXT DEFAULT NULL,
   text        TEXT NOT NULL,     

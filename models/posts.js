@@ -10,6 +10,7 @@ class Post {
              p.title,
              p.text,
              p.genre,
+             p.movieId,
              p.movieName,
              p.moviePoster,
              p.user_id AS "userId",
@@ -36,6 +37,7 @@ class Post {
            p.title,
            p.text,
            p.genre,
+           p.movieId,
            p.moviePoster,
            p.user_id AS "userId",
            u.email AS "userEmail",    
@@ -66,6 +68,7 @@ class Post {
              p.title,
              p.genre,
              p.text,
+             p.movieId,
              p.moviePoster,
              p.user_id AS "userId",
              u.email AS "userEmail",
@@ -107,13 +110,14 @@ class Post {
 
     const results = await db.query(
       `
-        INSERT INTO posts (text, user_id, title, genre, movieName, moviePoster)
-        VALUES ($1, $2, $3, $4, $5, $6)
+        INSERT INTO posts (text, user_id, title, genre, movieName, moviePoster, movieId)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
         RETURNING id AS "primaryKey",
                   user_id,
                   title,
                   text,
                   genre,
+                  movieId,
                   movieName,
                   moviePoster,
                   created_at AS "createdAt",
@@ -126,6 +130,7 @@ class Post {
         post.genre,
         post.movieName || null,
         post.moviePoster || null,
+        post.movieId || null,
       ]
     );
     return results.rows[0];

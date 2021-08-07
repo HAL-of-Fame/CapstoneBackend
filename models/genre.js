@@ -5,10 +5,11 @@ class Genre {
   // fetch all posts of that genre
   static async fetchAllPostsByGenre(genre) {
     const results = await db.query(
-        `SELECT p.id, 
+      `SELECT p.id, 
                 p.title, 
                 p.genre, 
                 p.moviePoster,
+                p.movieId,
                 p.text, 
                 p.created_at,
                 p.updated_at,

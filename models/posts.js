@@ -175,6 +175,13 @@ class Post {
       }
     });
 
+    if (postUpdate.title == "" || postUpdate.title == " ") {
+      throw new BadRequestError("Title field must not be blank");
+    }
+
+    if (postUpdate.text == "" || postUpdate.text == " ") {
+      throw new BadRequestError("Text field must not be blank");
+    }
     const results = await db.query(
       `
       UPDATE posts 

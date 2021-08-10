@@ -193,8 +193,8 @@ class Post {
                 title,
                 text,
                 user_id AS "userId",
-                created_at AS "createdAt",
-                updated_at AS "updatedAt"
+                created_at,
+                updated_at
       `,
       [postUpdate.text, postUpdate.title, postId]
     );

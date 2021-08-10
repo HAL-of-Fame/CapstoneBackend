@@ -29,7 +29,7 @@ class Order {
     if (!user) {
       throw new BadRequestError("No user provided");
     }
-    console.log(order);
+    // console.log(order);
     // create a new order
     const orderResult = await db.query(
       `
@@ -56,9 +56,9 @@ class Order {
       `
       );
       //use list.rows[] and do a for loop to check if each element in the list is equal to the product id
-      console.log("list lenght", list.rows.length);
-      console.log("list", list.rows);
-      console.log("resulkt0", list);
+      // console.log("list lenght", list.rows.length);
+      // console.log("list", list.rows);
+      // console.log("resulkt0", list);
       let found = false;
       for (let i = 0; i < list.rows.length; i++) {
         if (list.rows[i].id === productId) {

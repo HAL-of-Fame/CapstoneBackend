@@ -25,9 +25,6 @@ router.post(
   "/:postId",
   security.requireAuthenticatedUser,
   async function (req, res, next) {
-    // console.log("req.params", req.params)
-    // console.log("req.body", req.body)
-    // console.log("res.locals, users", res.locals)
     try {
       const { comment } = req.body;
       const { postId } = req.params;
@@ -61,7 +58,6 @@ router.patch(
   security.requireAuthenticatedUser,
   permissions.authUserOwnsComment,
   async function (req, res, next) {
-    console.log("inside patch");
     try {
       const { commentId } = req.params;
       const comment = await Comment.editComment({
@@ -81,12 +77,9 @@ router.delete(
   security.requireAuthenticatedUser,
   permissions.authUserOwnsComment,
   async function (req, res, next) {
-    console.log("made it inside router");
     try {
       const { commentId } = req.params;
-      console.log("inside router", commentId);
       const comment = await Comment.deleteCommentById(commentId);
-      console.log("after deletecommentbyid", comment);
       return res.status(200).json({ comment });
     } catch (err) {
       next(err);

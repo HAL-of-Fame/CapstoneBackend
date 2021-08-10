@@ -58,6 +58,9 @@ class Comment {
 
   // create a new comment
   static async createNewComment({ comment, user, postId }) {
+    if (comment == "" || comment == " ") {
+      throw new BadRequestError("Text field must not be blank");
+    }
     const results = await db.query(
       `
       INSERT INTO comments (text, user_id, post_id)

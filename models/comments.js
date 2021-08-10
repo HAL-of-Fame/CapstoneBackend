@@ -58,7 +58,7 @@ class Comment {
 
   // create a new comment
   static async createNewComment({ comment, user, postId }) {
-    if (comment == "" || comment == " ") {
+    if (comment.trim() == "") {
       throw new BadRequestError("Text field must not be blank");
     }
     const results = await db.query(

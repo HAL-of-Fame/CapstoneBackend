@@ -106,11 +106,11 @@ class Post {
       }
     });
 
-    if (post.title == "" || post.title == " ") {
+    if (post.title.trim() == "") {
       throw new BadRequestError("Title field must not be blank");
     }
 
-    if (post.text == "" || post.text == " ") {
+    if (post.text.trim() == "") {
       throw new BadRequestError("Text field must not be blank");
     }
 
